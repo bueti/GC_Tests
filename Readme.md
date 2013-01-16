@@ -1,11 +1,15 @@
-== Testing the Garbage Collector ==
+Testing the Garbage Collector
+============================
 
-=== mark/sweep/compact 
+mark/sweep/compact 
+==================
 java -jar KillTheGarbageCollector.jar -Xms4g -Xmx4g -XX:+UseSerialGC
 
-=== CMS
+CMS
+===
 java -jar KillTheGarbageCollector.jar -Xms4g -Xmx4g -XX:+UseConcMarkSweepGC
 
-=== G1
+G1
+==
 java -jar KillTheGarbageCollector.jar -Xms4g -Xmx4g -XX:MaxGCPauseMillis=250
 -XX:+UseG1GC 
