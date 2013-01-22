@@ -5,18 +5,14 @@ KillTheGarbageCollector.java is a Java Class taken from http://nerds-central.blo
 
 mark/sweep/compact 
 ==================
-    java -jar KillTheGarbageCollector.jar -Xms4g -Xmx4g -XX:+UseSerialGC
+    java -Xms3g -Xmx3g -XX:+UseSerialGC  -verbose:GC -jar StressTestGui.jar
 
 CMS
 ===
-    java -jar KillTheGarbageCollector.jar -Xms4g -Xmx4g -XX:+UseConcMarkSweepGC
+    java -Xms3g -Xmx3g -XX:+UseConcMarkSweepGC -verbose:GC -jar StressTestGui.jar
 
 G1
 ==
-    java -jar KillTheGarbageCollector.jar -Xms4g -Xmx4g -XX:MaxGCPauseMillis=250 -XX:+UseG1GC
+    java -Xms3g -Xmx3g -XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:+PrintGCDetails -jar StressTestGui.jar
 
-Other options
-=============
-    -verbose:GC
-    -XX:+PrintGCDetails
 
