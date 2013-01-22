@@ -7,8 +7,8 @@ public class KillTheGarbageCollector {
     private List<String> oldStore = new ArrayList<String>(1000000);
     private static int nThread=3;
 
-    public static void main(String[] args){
 
+    public KillTheGarbageCollector() {
         for(int i=0;i<nThread;++i){
 
             new Thread(){

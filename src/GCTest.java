@@ -10,16 +10,17 @@ class GCTest {
     static int initSteps = 16; // 2 MB
     static int testSteps = 1;
     static int objSize = 128; // 1/8 MB
-    public static void main(String[] arg) {
-        if (arg.length>0) initSteps = Integer.parseInt(arg[0]);
-        if (arg.length>1) testSteps = Integer.parseInt(arg[1]);
+
+    public GCTest() {
         objList = new MyList();
         Monitor m = new Monitor();
         m.setDaemon(true);
         m.start();
         myTest();
+
     }
-    public static void myTest() {
+
+    public void myTest() {
         for (int m=0; m<initSteps; m++) {
             mySleep(wait);
             objList.add(new MyObject());
