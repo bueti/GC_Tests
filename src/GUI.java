@@ -16,6 +16,7 @@ public class GUI {
     private JButton btnSerial;
     private JTextField xmxField;
     private JTextField xmsField;
+    private JComboBox<String> gcChooser;
 
     public GUI() {
         initialize();
@@ -31,7 +32,7 @@ public class GUI {
 
         // Button Panel
         JPanel btnPanel = new JPanel();
-        btnPanel.setLayout(new GridLayout(3,1));
+        btnPanel.setLayout(new GridLayout(4,1));
 
         // Input Panel, sets Memory Size
         JPanel inputPanel = new JPanel();
@@ -42,12 +43,15 @@ public class GUI {
         xmsField = new JTextField("3g");
         JLabel xmxLabel = new JLabel("Xmx:");
         JLabel xmsLabel = new JLabel("Xms:");
+        String[] gc = { "KillTheGarbageCollector", "GCTest", "GCTest2"};
+        gcChooser = new JComboBox<String>(gc);
 
         // Add Fields to Input Panel
         inputPanel.add(xmsLabel);
         inputPanel.add(xmsField);
         inputPanel.add(xmxLabel);
         inputPanel.add(xmxField);
+//        inputPanel.add(gcChooser);
 
         // Create Buttons
         btnG1 = new JButton("G1");
@@ -58,6 +62,7 @@ public class GUI {
         btnPanel.add(btnSerial);
         btnPanel.add(btnCMS);
         btnPanel.add(btnG1);
+        btnPanel.add(gcChooser);
 
         // Add ActionListners to Buttons
         btnG1.addActionListener(new G1ActionListener());
@@ -69,45 +74,86 @@ public class GUI {
         contentPane.add(inputPanel, BorderLayout.SOUTH);
 
         // Show Frame
-        frame.setSize(300, 250);
+        //frame.setSize(300, 250);
+        frame.pack();
         frame.setVisible(true);
     }
 
-    public static void startG1(String xms, String xmx) throws Exception {
+    // Very ugly...
+    public static void startG1(String xms, String xmx, String gc) throws Exception {
         String separator = System.getProperty("file.separator");
         String classpath = System.getProperty("java.class.path");
         String path = System.getProperty("java.home")
                 + separator + "bin" + separator + "java";
-        ProcessBuilder processBuilder =
-                new ProcessBuilder(path, "-Xms" + xms, "-Xmx" + xmx, "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=250", "-XX:+PrintGCDetails", "-cp",
-                        classpath,
-                        KillTheGarbageCollector.class.getName());
+        ProcessBuilder processBuilder;
+        if(gc.equals("KillTheGarbageCollector")) {
+            processBuilder =
+                    new ProcessBuilder(path, "-Xms" + xms, "-Xmx" + xmx, "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=250", "-XX:+PrintGCDetails", "-cp",
+                            classpath,
+                            KillTheGarbageCollector.class.getName());
+        } else if (gc.equals("GCTest")) {
+            processBuilder =
+                    new ProcessBuilder(path, "-Xms" + xms, "-Xmx" + xmx, "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=250", "-XX:+PrintGCDetails", "-cp",
+                            classpath,
+                            GCTest.class.getName());
+        } else {
+            processBuilder =
+                    new ProcessBuilder(path, "-Xms" + xms, "-Xmx" + xmx, "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=250", "-XX:+PrintGCDetails", "-cp",
+                            classpath,
+                            GCTest2.class.getName());
+        }
         Process process = processBuilder.start();
         process.waitFor();
     }
 
-    public static void startCMS(String xms, String xmx) throws Exception {
+    public static void startCMS(String xms, String xmx, String gc) throws Exception {
         String separator = System.getProperty("file.separator");
         String classpath = System.getProperty("java.class.path");
         String path = System.getProperty("java.home")
                 + separator + "bin" + separator + "java";
-        ProcessBuilder processBuilder =
-                new ProcessBuilder(path, "-Xms" + xms, "-Xmx" + xmx, "-XX:+UseConcMarkSweepGC", "-verbose:GC", "-cp",
-                        classpath,
-                        KillTheGarbageCollector.class.getName());
+        ProcessBuilder processBuilder;
+        if(gc.equals("KillTheGarbageCollector")) {
+              processBuilder =
+                    new ProcessBuilder(path, "-Xms" + xms, "-Xmx" + xmx, "-XX:+UseConcMarkSweepGC", "-verbose:GC", "-cp",
+                            classpath,
+                            KillTheGarbageCollector.class.getName());
+        } else if (gc.equals("GCTest")) {
+            processBuilder =
+                    new ProcessBuilder(path, "-Xms" + xms, "-Xmx" + xmx, "-XX:+UseConcMarkSweepGC", "-verbose:GC", "-cp",
+                            classpath,
+                            GCTest.class.getName());
+        } else {
+            processBuilder =
+                    new ProcessBuilder(path, "-Xms" + xms, "-Xmx" + xmx, "-XX:+UseConcMarkSweepGC", "-verbose:GC", "-cp",
+                            classpath,
+                            GCTest2.class.getName());
+        }
         Process process = processBuilder.start();
         process.waitFor();
     }
 
-    public static void startSerial(String xms, String xmx) throws Exception {
+    public static void startSerial(String xms, String xmx, String gc) throws Exception {
         String separator = System.getProperty("file.separator");
         String classpath = System.getProperty("java.class.path");
         String path = System.getProperty("java.home")
                 + separator + "bin" + separator + "java";
-        ProcessBuilder processBuilder =
-                new ProcessBuilder(path, "-Xms" + xms, "-Xmx" + xmx, "-XX:+UseSerialGC", "-verbose:GC", "-cp",
-                        classpath,
-                        KillTheGarbageCollector.class.getName());
+        ProcessBuilder processBuilder;
+        if(gc.equals("KillTheGarbageCollector")) {
+            processBuilder =
+                    new ProcessBuilder(path, "-Xms" + xms, "-Xmx" + xmx, "-XX:+UseSerialGC", "-verbose:GC", "-cp",
+                            classpath,
+                            KillTheGarbageCollector.class.getName());
+        } else if (gc.equals("GCTest")) {
+            processBuilder =
+                    new ProcessBuilder(path, "-Xms" + xms, "-Xmx" + xmx, "-XX:+UseSerialGC", "-verbose:GC", "-cp",
+                            classpath,
+                            GCTest.class.getName());
+        } else {
+            processBuilder =
+                    new ProcessBuilder(path, "-Xms" + xms, "-Xmx" + xmx, "-XX:+UseSerialGC", "-verbose:GC", "-cp",
+                            classpath,
+                            GCTest2.class.getName());
+        }
         Process process = processBuilder.start();
         process.waitFor();
     }
@@ -118,9 +164,9 @@ public class GUI {
         public void actionPerformed(ActionEvent ae) {
             // Start StressTest
             try {
-                startG1(xmsField.getText(), xmxField.getText());
+                startG1(xmsField.getText(), xmxField.getText(), (String)gcChooser.getSelectedItem());
             } catch (Exception e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
         }
     }
@@ -130,9 +176,9 @@ public class GUI {
         public void actionPerformed(ActionEvent ae) {
             // Start StressTest
             try {
-                startCMS(xmsField.getText(), xmxField.getText());
+                startCMS(xmsField.getText(), xmxField.getText(), (String)gcChooser.getSelectedItem());
             } catch (Exception e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
         }
     }
@@ -142,9 +188,9 @@ public class GUI {
         public void actionPerformed(ActionEvent ae) {
             // Start StressTest
             try {
-                startSerial(xmsField.getText(), xmxField.getText());
+                startSerial(xmsField.getText(), xmxField.getText(), (String)gcChooser.getSelectedItem());
             } catch (Exception e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
         }
     }
